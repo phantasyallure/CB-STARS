@@ -23,6 +23,7 @@ on conflict (key) do nothing;
 -- 2. ADMIN ACCOUNTS + PERMISSIONS ------------------------------------------
 -- One row per person allowed into /admin. Logins live in Supabase Auth;
 -- this table says who they are and what they may touch.
+
 create table if not exists admin_profiles (
   user_id uuid primary key references auth.users(id) on delete cascade,
   email text not null,
