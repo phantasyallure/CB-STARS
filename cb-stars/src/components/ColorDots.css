@@ -1,0 +1,39 @@
+.color-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.color-row__more {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  margin-inline-start: 2px;
+}
+
+.color-picker { margin-bottom: 24px; }
+
+.color-picker__head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.color-picker__label { font-size: 0.82rem; color: var(--ink-muted); }
+.color-picker__name { font-size: 0.9rem; color: var(--ink); font-weight: 600; }
+
+.color-picker__dots { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.color-picker__dot {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background: transparent;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+.color-picker__dot:hover { transform: scale(1.06); border-color: var(--hairline); }
+.color-picker__dot.is-selected { border-color: var(--gold); }
