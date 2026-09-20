@@ -1,0 +1,9 @@
+name = "cb-stars"
+compatibility_date = "2026-09-01"
+# "nodejs_compat" polyfills Node globals (Buffer, process, etc.) that the
+# functions in /functions/api use. If you deploy via the Cloudflare dashboard
+# (git integration) instead of `wrangler pages deploy`, also set this flag in
+# Pages > Settings > Functions > Compatibility flags, for BOTH Production and
+# Preview — the dashboard does not read this file automatically.
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
