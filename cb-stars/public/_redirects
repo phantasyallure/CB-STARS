@@ -1,3 +1,0 @@
-# Cloudflare Pages checks Functions (/functions/api/**) and static files
-# first, so this only ever applies to client-side routes like /product/:id.
-/*  /index.html  200
