@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase, PRODUCT_IMAGES_BUCKET } from '../../lib/supabaseClient'
 import { apiFetch } from '../../lib/api.js'
-import { fileToBase64, base64ToFile } from '../../lib/image.js'
+import { fileToBase64, base64ToFile, prepareForUpload } from '../../lib/image.js'
 import Modal from '../../components/Modal.jsx'
 import { IconWand, IconUndo, IconX, IconPlus, IconImage } from '../../components/AdminIcons.jsx'
 import { CATEGORIES } from '../../data/categories.js'
