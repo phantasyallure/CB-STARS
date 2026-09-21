@@ -9,7 +9,7 @@ import { COLOR_PRESETS, colorName, normalizeHex } from '../../data/colors.js'
 import { CLOTHING_SIZES, SHOE_SIZES } from '../../data/sizes.js'
 import { useLanguage } from '../../i18n/LanguageContext.jsx'
 
-const MAX_PHOTOS = 5
+const MAX_PHOTOS = 30
 
 let uid = 0
 const nextId = () => `p${++uid}`
@@ -71,6 +71,8 @@ export default function ProductForm({ product, onClose, onSaved, notify }) {
     if (parts.length) setSizes((list) => [...new Set([...list, ...parts])])
     setCustomSize('')
   }
+  // Shoes get shoe sizes (EU 36-45); every other category gets clothing sizes —
+  // the quick-pick list is a starting point and the owner can always type a custom size.
   const sizeOptions = useMemo(
     () => [...new Set([...(form.category === 'shoes' ? SHOE_SIZES : CLOTHING_SIZES), ...sizes])],
     [form.category, sizes]
