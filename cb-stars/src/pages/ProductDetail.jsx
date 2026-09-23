@@ -18,6 +18,7 @@ export default function ProductDetail() {
   const wilayaLabels = lang === 'ar' ? WILAYAS_AR : WILAYAS  // French names are used for fr and en
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [activeImage, setActiveImage] = useState(0)
   const [photoColor, setPhotoColor] = useState('') // last picked colour that has its own photos
 
@@ -34,11 +35,13 @@ export default function ProductDetail() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase.from('products_public').select('*').eq('id', id).single()
+  const load = async () => {
+    setLoading(true)
+    setLoadError(false)
+    try {
+      const { data, error } = await supabase.from('products_public').select('*').eq('id', id).single()
+      if (error) throw error
       setProduct(data)
-      setLoading(false)
       if (data) {
         trackPixel('ViewContent', {
           content_ids: [data.id],
@@ -48,7 +51,14 @@ export default function ProductDetail() {
           currency: 'DZD',
         })
       }
+    } catch {
+      setLoadError(true)
+    } finally {
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     load()
   }, [id])
 
@@ -116,6 +126,20 @@ export default function ProductDetail() {
     )
   }
 
+  if (!product && loadError) {
+    return (
+      <div className="product-page">
+        <SiteHeader />
+        <div className="container product-page__status">
+          <p>{lang === 'ar' ? 'تعذر تحميل هذا المنتج.' : lang === 'en' ? 'Could not load this product.' : 'Impossible de charger ce produit.'}</p>
+          <button type="button" className="btn" onClick={load}>
+            {lang === 'ar' ? 'إعادة المحاولة' : lang === 'en' ? 'Retry' : 'Réessayer'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   if (!product) {
     return (
       <div className="product-page">
@@ -161,7 +185,7 @@ export default function ProductDetail() {
             {images[activeImage] ? (
               <img key={images[activeImage]} src={images[activeImage]} alt={product.name} />
             ) : (
-              <div className="product-gallery__placeholder signature">CB Stars</div>
+              <div className="product-gallery__placeholder signature">Luxor</div>
             )}
           </div>
           {images.length > 1 && (
