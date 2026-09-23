@@ -11,17 +11,27 @@ export default function Landing() {
   const { t, lang } = useLanguage()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [activeCategory, setActiveCategory] = useState('all')
 
-  useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase
+  const load = async () => {
+    setLoading(true)
+    setLoadError(false)
+    try {
+      const { data, error } = await supabase
         .from('products_public')
         .select('*')
         .order('created_at', { ascending: false })
+      if (error) throw error
       setProducts(data || [])
+    } catch {
+      setLoadError(true)
+    } finally {
       setLoading(false)
     }
+  }
+
+  useEffect(() => {
     load()
   }, [])
 
@@ -67,11 +77,21 @@ export default function Landing() {
 
         {loading && <p className="landing__status">{t('collection.loading')}</p>}
 
-        {!loading && products.length === 0 && (
+        {!loading && loadError && (
+          <p className="landing__status">
+            {t('collection.loadError') || (lang === 'ar' ? 'تعذر تحميل المنتجات.' : lang === 'en' ? 'Could not load products.' : "Impossible de charger les produits.")}
+            {' '}
+            <button type="button" className="landing__retry" onClick={load}>
+              {lang === 'ar' ? 'إعادة المحاولة' : lang === 'en' ? 'Retry' : 'Réessayer'}
+            </button>
+          </p>
+        )}
+
+        {!loading && !loadError && products.length === 0 && (
           <p className="landing__status">{t('collection.empty')}</p>
         )}
 
-        {!loading && products.length > 0 && (
+        {!loading && !loadError && products.length > 0 && (
           <div className="category-filter" role="group" aria-label={t('collection.filterLabel')}>
             <button
               type="button"
@@ -109,10 +129,10 @@ export default function Landing() {
       <footer className="landing__footer">
         <div className="container landing__footer-inner">
           <div>
-            <span className="brand-mark landing__footer-brand">CB</span>
+            <span className="brand-mark landing__footer-brand">LX</span>
             <p className="landing__footer-tagline">{t('footer.tagline')}</p>
           </div>
-          <p className="landing__footer-rights">© {new Date().getFullYear()} CB — {t('footer.rights')}</p>
+          <p className="landing__footer-rights">© {new Date().getFullYear()} LX — {t('footer.rights')}</p>
         </div>
       </footer>
 
