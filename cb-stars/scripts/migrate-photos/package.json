@@ -1,0 +1,6 @@
+{
+  "name": "migrate-photos",
+  "private": true,
+  "type": "module",
+  "dependencies": { "sharp": "^0.33.5", "wrangler": "^4.42.1" }
+}
