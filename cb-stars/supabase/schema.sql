@@ -399,3 +399,4 @@ create policy "Admins upload product images" on storage.objects for insert
   with check (bucket_id = 'product-images' and has_perm('products'));
 create policy "Admins delete product images" on storage.objects for delete
   using (bucket_id = 'product-images' and has_perm('products'));
+ 
